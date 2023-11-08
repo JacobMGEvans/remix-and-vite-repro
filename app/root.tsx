@@ -1,3 +1,5 @@
+import type { MetaFunction, LoaderFunction } from "@remix-run/node";
+
 import {
   Links,
   LiveReload,
@@ -7,21 +9,38 @@ import {
   ScrollRestoration,
 } from "@remix-run/react";
 
-export default function App() {
+import { rootAuthLoader } from "@clerk/remix/ssr.server";
+// Import ClerkApp
+import { ClerkApp } from "@clerk/remix";
+
+export const meta: MetaFunction = () => [
+  {
+    charset: "utf-8",
+    title: "New Remix App",
+    viewport: "width=device-width,initial-scale=1",
+  },
+];
+
+export const loader: LoaderFunction = (args) => {
+  return rootAuthLoader(args);
+};
+
+function App() {
   return (
     <html lang="en">
       <head>
-        <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
       </head>
       <body>
         <Outlet />
         <ScrollRestoration />
-        <LiveReload />
         <Scripts />
+        <LiveReload />
       </body>
     </html>
   );
 }
+
+// Wrap your app in ClerkApp(app)
+export default ClerkApp(App);
