@@ -11,7 +11,7 @@ import {
 
 import { rootAuthLoader } from "@clerk/remix/ssr.server";
 // Import ClerkApp
-import { ClerkApp } from "@clerk/remix";
+import { ClerkApp, ClerkErrorBoundary } from "@clerk/remix";
 
 export const meta: MetaFunction = () => [
   {
@@ -22,8 +22,12 @@ export const meta: MetaFunction = () => [
 ];
 
 export const loader: LoaderFunction = (args) => {
-  return rootAuthLoader(args);
+  return rootAuthLoader(args, {
+    publishableKey: import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
+    secretKey: import.meta.env.VITE_CLERK_SECRET_KEY,
+  });
 };
+// export const ErrorBoundary = ClerkErrorBoundary();
 
 function App() {
   return (
